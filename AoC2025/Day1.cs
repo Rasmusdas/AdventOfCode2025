@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace AoC2025
 {
     public class Day1 : Day
     {
-
+        [Benchmark]
         public void SolvePart1()
         {
             int dial = 50;
@@ -31,12 +32,14 @@ namespace AoC2025
                     count++;
                 }
             }
-
+#if  DEBUG
             Console.WriteLine(count);
+#endif
             
         }
 
 
+        [Benchmark]
         public void SolvePart2()
         {
             int dial = 50;
@@ -79,8 +82,9 @@ namespace AoC2025
                 prevCount = count;
 
             }
-
+#if DEBUG
             Console.WriteLine(count);
+#endif
         }
 
         public int Mod(int a,int b)
