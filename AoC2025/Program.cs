@@ -9,5 +9,8 @@
 //new Day3().SolvePart1();
 //new Day3().SolvePart2();
 
-new Day4().SolvePart1();
-new Day4().SolvePart2();
+// new Day4().SolvePart1();
+// new Day4().SolvePart2();
+
+new Day5().SolvePart1();
+new Day5().SolvePart2();
