@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace AoC2025
 {
     public class Day3 : Day
     {
+        [Benchmark]
         public void SolvePart1()
         {
             int joltageSum = 0;
@@ -30,14 +32,15 @@ namespace AoC2025
                     }
                     pointer++;
                 }
-
                 joltageSum += int.Parse(batteries[maxVal] + "" + batteries[nextMaxVal]);
             }
-
+#if DEBUG
             Console.WriteLine(joltageSum);
+#endif
         }
 
 
+        [Benchmark]
         public void SolvePart2()
         {
             double joltageSum = 0;
@@ -89,7 +92,10 @@ namespace AoC2025
 
                 joltageSum += double.Parse(joltage);
             }
+
+#if DEBUG
             Console.WriteLine(joltageSum);
+#endif
         }
     }
 }

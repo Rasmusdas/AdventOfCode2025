@@ -4,12 +4,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace AoC2025
 {
     public class Day4 : Day
     {
 
+        [Benchmark]
         public void SolvePart1()
         {
             var paperRolls = inputLines;
@@ -35,8 +37,9 @@ namespace AoC2025
                     }
                 }
             }
-
+#if DEBUG
             Console.WriteLine(validRolls);
+#endif
         }
 
 
@@ -52,7 +55,7 @@ namespace AoC2025
             }
         }
 
-
+        [Benchmark]
         public void SolvePart2()
         {
             var paperRolls = inputLines.Select((x) => x.ToCharArray()).ToArray();
@@ -86,8 +89,9 @@ namespace AoC2025
                     }
                 }
             }
-
+#if DEBUG
             Console.WriteLine(validRolls);
+#endif
 
         }
     }

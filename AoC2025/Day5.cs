@@ -4,12 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace AoC2025
 {
     public class Day5 : Day
     {
-
+        [Benchmark]
         public void SolvePart1()
         {
             List<Interval> intervals = new List<Interval>();
@@ -58,10 +59,11 @@ namespace AoC2025
                     }
                 }
             }
-            
+#if DEBUG
             Console.WriteLine(validIds);
+#endif
         }
-
+        [Benchmark]
         public void SolvePart2()
         {
             List<Interval> intervals = new List<Interval>();
@@ -100,8 +102,9 @@ namespace AoC2025
             {
                 validIds += interval.End-interval.Start+1;
             }
-
+#if DEBUG
             Console.WriteLine(validIds);
+#endif
         }
     }
 

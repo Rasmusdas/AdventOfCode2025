@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
 
 namespace AoC2025
 {
     public class Day2 : Day
     {
 
+        [Benchmark]
         public void SolvePart1()
         {
             var idRanges = input.Split(",");
 
             double sum = 0;
 
-            foreach(var idRange in idRanges)
+            foreach (var idRange in idRanges)
             {
                 var range = idRange.Split("-");
 
@@ -23,23 +25,26 @@ namespace AoC2025
                 long end = long.Parse(range[1]);
 
 
-                for(long i = start; i < end; i++)
+                for (long i = start; i < end; i++)
                 {
                     var testString = i.ToString();
                     var string1 = testString.Substring(0, testString.Length / 2);
                     var string2 = testString.Substring(testString.Length / 2);
 
 
-                    if(string1 == string2)
+                    if (string1 == string2)
                     {
                         sum += i;
                     }
                 }
             }
+#if DEBUG
             Console.WriteLine(sum);
+#endif
+
         }
 
-
+        [Benchmark]
         public void SolvePart2()
         {
             var idRanges = input.Split(",");
@@ -65,8 +70,9 @@ namespace AoC2025
                     }
                 }
             }
-
+#if DEBUG
             Console.WriteLine(sum);
+#endif
         }
 
 
