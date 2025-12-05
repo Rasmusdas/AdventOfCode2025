@@ -70,9 +70,6 @@ namespace AoC2025
 
             var intervalSplit = inputLines.Index().First((x) => x.Item.Length == 0).Index;
             
-            
-            Console.WriteLine(inputLines[intervalSplit]);
-
             for (int i = 0; i < intervalSplit; i++)
             {
                 var split = inputLines[i].Split('-');
@@ -86,11 +83,8 @@ namespace AoC2025
             intervals.Sort((x, y) => x.Start.CompareTo(y.Start));
 
             int intervalCount = 0;
-            Console.WriteLine(intervals.Count);
             while (intervalCount < intervals.Count-1)
             {
-                
-                
                 if (intervals[intervalCount].End > intervals[intervalCount + 1].Start)
                 {
                     intervals[intervalCount].End = Math.Max(intervals[intervalCount].End, intervals[intervalCount + 1].End);
@@ -101,8 +95,6 @@ namespace AoC2025
                     intervalCount++;
                 }
             }
-            
-            Console.WriteLine(intervals.Count);
             
             foreach (var interval in intervals)
             {

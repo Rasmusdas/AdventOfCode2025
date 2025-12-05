@@ -68,12 +68,8 @@ namespace AoC2025
                         if (batteries[pointer] > batteries[indices[i]] && indices[i] < pointer)
                         {
                             indices[i] = pointer;
-                            //Console.WriteLine(batteries.Length - pointer);
-                            //Console.WriteLine(indices.Length - i - 1);
-                            //Console.WriteLine($"Moving pointer {i} to {pointer}");
                             for (int j = 1; j < indices.Length - i; j++)
                             {
-                                //Console.WriteLine($"Pushing pointer {i+j} to {pointer + j}");
                                 indices[i + j] = pointer + j;
                             }
                             break;
