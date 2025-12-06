@@ -1,14 +1,20 @@
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnosers;
+
 namespace AoC2025;
 
+[EventPipeProfiler(EventPipeProfile.CpuSampling)]
 public class Day6 : Day
 {
+    
+    [Benchmark]
     public void SolvePart1()
     {
         var numberMatrix = inputLines.Select(x => x.Split(" ",StringSplitOptions.RemoveEmptyEntries)).ToArray();
         long sum = 0;
         for (int i = 0; i < numberMatrix[0].Length; i++)
         {
-            string op = numberMatrix[numberMatrix.Length-1][i];
+            string op = numberMatrix[^1][i];
             long currSum = op == "+" ? 0 : 1;
             for (int j = 0; j < numberMatrix.Length-1; j++)
             {
@@ -31,6 +37,7 @@ public class Day6 : Day
             
     }
 
+    [Benchmark]
     public void SolvePart2()
     {
         int start = 0;
@@ -81,7 +88,9 @@ public class Day6 : Day
             end++;
         }
         
+#if DEBUG
         Console.WriteLine(sum);
+#endif
 
 
 
