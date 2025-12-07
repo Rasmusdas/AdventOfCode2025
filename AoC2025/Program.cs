@@ -17,13 +17,18 @@ using BenchmarkDotNet.Running;
 // new Day5().SolvePart1();
 // new Day5().SolvePart2();
 //
-new Day6().SolvePart1();
-new Day6().SolvePart2();
+// new Day6().SolvePart1();
+// new Day6().SolvePart2();
+
+new Day7().SolvePart1();
+new Day7().SolvePart2();
+
 #else
 // BenchmarkRunner.Run<Day1>();
 // BenchmarkRunner.Run<Day2>();
 // BenchmarkRunner.Run<Day3>();
 // BenchmarkRunner.Run<Day4>();
 // BenchmarkRunner.Run<Day5>();
-BenchmarkRunner.Run<Day6>();
+// BenchmarkRunner.Run<Day6>();
+BenchmarkRunner.Run<Day7>();
 #endif
