@@ -21,21 +21,48 @@ public class Day8 : Day
             boxes.Add(new JunctionBox(x, y, z));
         }
 
-        List<(JunctionBox, JunctionBox, double)> boxPairs = new();
+        PriorityQueue<(JunctionBox, JunctionBox,long),long> boxPairs = new();
 
+        int testCount = 0;
+        int testInterval = 20000;
+        long distance = long.MaxValue;
+        
         for (int i = 0; i < boxes.Count; i++)
         {
             for (int j = i + 1; j < boxes.Count; j++)
             {
-                boxPairs.Add((boxes[i], boxes[j], boxes[j].Dist(boxes[i])));
+                var dist = boxes[j].Dist(boxes[i]);
+                if (dist < distance)
+                {
+                    boxPairs.Enqueue((boxes[i], boxes[j],dist), dist);
+                }
+                
+                // Every testInterval runs we extract the 1000 smallest distances to get a lower bound on how far away a distance can be.
+                // This should reduce lead to much fewer insertions at the expense of heuristic calculations.
+                // Benchmarking shows this to be 2-3x faster running it every 10000 intervals
+                if((++testCount) % testInterval == 0)
+                {
+                    List<(JunctionBox, JunctionBox, long)> distanceTest = new(1024);
+                    for (int k = 0; k < 1000; k++)
+                    {
+                        distanceTest.Add(boxPairs.Dequeue());
+                    }
+
+                    distance = Math.Min(distanceTest[^1].Item3, distance);
+
+                    foreach (var v in distanceTest)
+                    {
+                        boxPairs.Enqueue(v,v.Item3);
+                    }
+                }
             }
         }
-
-        boxPairs.Sort((p1, p2) => p1.Item3.CompareTo(p2.Item3));
+        
         Graph<JunctionBox> graph = new();
         for (int i = 0; i < 1000; i++)
         {
-            graph.AddEdge(boxPairs[i].Item1, boxPairs[i].Item2);
+            var boxPair = boxPairs.Dequeue();
+            graph.AddEdge(boxPair.Item1, boxPair.Item2);
         }
         
         var sizes = graph.GetComponentSizes();
@@ -110,22 +137,22 @@ public class Day8 : Day
 
 public class JunctionBox
 {
-    public readonly double X;
-    public readonly double Y;
-    public readonly double Z;
+    public readonly int X;
+    public readonly int Y;
+    public readonly int Z;
 
-    public JunctionBox(double x, double y, double z)
+    public JunctionBox(int x, int y, int z)
     {
         X = x;
         Y = y;
         Z = z;
     }
 
-    public double Dist(JunctionBox other)
+    public long Dist(JunctionBox other)
     {
-        return Math.Pow(other.X - X, 2) +
-               Math.Pow(other.Y - Y, 2) +
-               Math.Pow(other.Z - Z, 2);
+        return (long)(Math.Pow(other.X - X, 2) +
+                      Math.Pow(other.Y - Y, 2) +
+                      Math.Pow(other.Z - Z, 2));
     }
 
     public override string ToString()
