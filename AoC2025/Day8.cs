@@ -24,7 +24,7 @@ public class Day8 : Day
         PriorityQueue<(JunctionBox, JunctionBox,long),long> boxPairs = new();
 
         int testCount = 0;
-        int testInterval = 20000;
+        int testInterval = 10000;
         long distance = long.MaxValue;
         
         for (int i = 0; i < boxes.Count; i++)
@@ -37,10 +37,10 @@ public class Day8 : Day
                     boxPairs.Enqueue((boxes[i], boxes[j],dist), dist);
                 }
                 
-                // Every testInterval runs we extract the 1000 smallest distances to get a lower bound on how far away a distance can be.
-                // This should reduce lead to much fewer insertions at the expense of heuristic calculations.
-                // Benchmarking shows this to be 2-3x faster running it every 10000 intervals
-                if((++testCount) % testInterval == 0)
+                // After testInterval runs we extract the 1000 smallest distances to get a lower bound on how far away a distance can be.
+                // This should reduce lead to much fewer insertions at the expense of the heuristic calculations.
+                // Benchmarking shows this to be 2-3x faster running it after 10000 distance calculations
+                if((++testCount) == testInterval)
                 {
                     List<(JunctionBox, JunctionBox, long)> distanceTest = new(1024);
                     for (int k = 0; k < 1000; k++)
@@ -57,6 +57,7 @@ public class Day8 : Day
                 }
             }
         }
+        
         
         Graph<JunctionBox> graph = new();
         for (int i = 0; i < 1000; i++)
@@ -97,51 +98,77 @@ public class Day8 : Day
             boxes.Add(new JunctionBox(x, y, z));
         }
 
-        List<(JunctionBox, JunctionBox, double)> boxPairs = new();
+        PriorityQueue<(JunctionBox, JunctionBox,long),long> boxPairs = new();
 
+        int testCount = 0;
+        int testInterval = 10000;
+        long distance = long.MaxValue;
+        
         for (int i = 0; i < boxes.Count; i++)
         {
             for (int j = i + 1; j < boxes.Count; j++)
             {
-                boxPairs.Add((boxes[i], boxes[j], boxes[j].Dist(boxes[i])));
+                var dist = boxes[j].Dist(boxes[i]);
+                if (dist < distance)
+                {
+                    boxPairs.Enqueue((boxes[i], boxes[j],dist), dist);
+                }
+                
+                // After testInterval runs we extract the 1000 smallest distances to get a lower bound on how far away a distance can be.
+                // This should reduce lead to much fewer insertions at the expense of the heuristic calculations.
+                // Benchmarking shows this to be 2-3x faster running it after 10000 distance calculations
+                if((++testCount) == testInterval)
+                {
+                    List<(JunctionBox, JunctionBox, long)> distanceTest = new(1024);
+                    for (int k = 0; k < 1000; k++)
+                    {
+                        distanceTest.Add(boxPairs.Dequeue());
+                    }
+
+                    distance = Math.Min(distanceTest[^1].Item3, distance);
+
+                    foreach (var v in distanceTest)
+                    {
+                        boxPairs.Enqueue(v,v.Item3);
+                    }
+                }
             }
         }
-
-        boxPairs.Sort((p1, p2) => p1.Item3.CompareTo(p2.Item3));
+        
+        
         Graph<JunctionBox> graph = new();
+        var boxPair = boxPairs.Dequeue();
         for (int i = 0; i < 1000; i++)
         {
-            graph.AddEdge(boxPairs[i].Item1, boxPairs[i].Item2);
+            graph.AddEdge(boxPair.Item1, boxPair.Item2);
+            boxPair = boxPairs.Dequeue();
         }
 
-        int nextPair = 1000;
-        
-        while (boxes.Count != graph.GetComponentSize(boxPairs[0].Item1))
-        {
-            if (nextPair >= boxPairs.Count)
-            {
-                Console.WriteLine("Something went wrong");
-                break;
-            }
-            
-            graph.AddEdge(boxPairs[nextPair].Item1,boxPairs[nextPair].Item2);
 
-            nextPair++;
+        var prevPair = boxPair;
+
+        while (graph.NodeCount < 1000)
+        {
+            
+            graph.AddEdge(boxPair.Item1, boxPair.Item2);
+
+            prevPair = boxPair;
+            boxPair = boxPairs.Dequeue();
         }
 
 #if DEBUG
-        Console.WriteLine(boxPairs[nextPair-1].Item1.X*boxPairs[nextPair-1].Item2.X);
+        Console.WriteLine(prevPair.Item1.X*prevPair.Item2.X);
 #endif
     }
 }
 
 public class JunctionBox
 {
-    public readonly int X;
-    public readonly int Y;
-    public readonly int Z;
+    public readonly long X;
+    public readonly long Y;
+    public readonly long Z;
 
-    public JunctionBox(int x, int y, int z)
+    public JunctionBox(long x, long y, long z)
     {
         X = x;
         Y = y;
@@ -167,6 +194,7 @@ public class Graph<T>
     private List<T> _nodes = new();
     private Dictionary<T,int> _idLookup = new();
     private int _nextId = 0;
+    public int NodeCount => _nodes.Count;
 
     public void AddNode(T node)
     {
@@ -280,5 +308,8 @@ public class Graph<T>
         return count;
     }
 
-    public int GetNodeCount => _nodes.Count;
+    public bool InGraph(T node)
+    {
+        return _idLookup.TryGetValue(node, out _);
+    }
 }
