@@ -1,3 +1,4 @@
+using System.Globalization;
 using BenchmarkDotNet.Attributes;
 
 namespace AoC2025;
@@ -17,8 +18,7 @@ public class Day7 : Day
         Console.WriteLine(ShootBeamPart1(1,grid[0].IndexOf('S')));
 #endif
     }
-
-
+    
     
     
     [Benchmark]
@@ -82,11 +82,11 @@ public class Day7 : Day
     public void DrawGrid()
     {
         Thread.Sleep(500);
-        for (int i = 0; i < memory.GetLength(0); i++)
+        for (int i = 0; i < grid.Length; i++)
         {
-            for (int j = 0; j < memory.GetLength(1); j++)
+            for (int j = 0; j < grid[0].Length; j++)
             {
-                Console.Write(memory[i,j]);
+                Console.Write(grid[i][j]);
             }
 
             Console.WriteLine();
