@@ -37,5 +37,7 @@ new Day9().SolvePart2();
 // BenchmarkRunner.Run<Day5>();
 // BenchmarkRunner.Run<Day6>();
 // BenchmarkRunner.Run<Day7>();
-BenchmarkRunner.Run<Day8>();
+// BenchmarkRunner.Run<Day8>();
+BenchmarkRunner.Run<Day9>();
+
 #endif

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -8,6 +9,8 @@ namespace AoC2025
 {
     public class Day9 : Day
     {
+
+        [Benchmark]
         public void SolvePart1()
         {
 
@@ -43,6 +46,7 @@ namespace AoC2025
 #endif
         }
 
+        [Benchmark]
         public void SolvePart2()
         {
 
@@ -78,81 +82,14 @@ namespace AoC2025
             horizontalLines.Sort((l1, l2) => l1.P1.Y.CompareTo(l2.P2.Y));
             verticalLines.Sort((l1, l2) => l1.P1.X.CompareTo(l2.P2.X));
 
-            //List<Box> overlaps = new();
-
-            
-            //for (int i = 1; i < horizontalLines.Count; i++)
-            //{
-            //    double y = horizontalLines[i].P1.Y;
-
-            //    Point p1N = new Point(double.MinValue, y);
-            //    Point p2N = new Point(double.MaxValue, y);
-
-            //    Line testLine = new Line(p1N, p2N);
-
-            //    int lastIntersect = -1;
-
-            //    for (int j = 0; j < verticalLines.Count; j++)
-            //    {
-            //        if (verticalLines[j].Intersects(testLine))
-            //        {
-            //            if (lastIntersect == -1 && Math.Min(verticalLines[j].P1.Y, verticalLines[j].P2.Y) != y)
-            //            {
-            //                lastIntersect = j;
-            //            }
-            //            else if(Math.Min(verticalLines[j].P1.Y, verticalLines[j].P2.Y) != y)
-            //            {
-            //                var l1 = verticalLines[lastIntersect];
-            //                var l2 = verticalLines[j];
-
-            //                var minY = Math.Max(Math.Max(Math.Min(l1.P1.Y, l1.P2.Y), Math.Min(l2.P1.Y, l2.P2.Y)), horizontalLines[i-1].P1.Y);
-            //                var maxY = Math.Min(Math.Min(Math.Max(l1.P1.Y, l1.P2.Y), Math.Max(l2.P1.Y, l2.P2.Y)), horizontalLines[i].P1.Y);
-            //                var minX = Math.Min(Math.Max(l1.P1.X, l1.P2.X), Math.Max(l2.P1.X, l2.P2.X));
-            //                var maxX = Math.Max(Math.Min(l1.P1.X, l1.P2.X), Math.Min(l2.P1.X, l2.P2.X));
-            //                overlaps.Add(new Box(new Point(minX, minY), new Point(maxX, maxY)));
-            //                lastIntersect = -1;
-            //            }
-
-            //        }
-            //    }
-            //}
-
-
-
-            //for (int i = 0; i < overlaps.Count; i++)
-            //{
-            //    for (int j = i+1; j < overlaps.Count; j++)
-            //    {
-            //        if (overlaps[i].GetOverlapSize(overlaps[j]) > 0)
-            //        {
-
-            //            if (overlaps[j].P1.X == overlaps[i].P1.X && overlaps[j].P2.X == overlaps[i].P2.X)
-            //            {
-            //                overlaps[j].P1.Y++;
-            //            }
-            //            else if (overlaps[i].P1.X <= overlaps[j].P1.X && overlaps[i].P2.X >= overlaps[j].P2.X)
-            //            {
-            //                overlaps[j].P1.Y++;
-            //            }
-
-            //            else if (overlaps[j].P1.X <= overlaps[i].P1.X && overlaps[j].P2.X >= overlaps[i].P2.X)
-            //            {
-            //                overlaps[i].P2.Y--;
-            //            }
-
-
-            //        }
-            //    }  
-            //}
+            points.Sort((x, y) => x.X.CompareTo(y.X));
 
             double bestSize = -1;
             Box bestBox = null;
 
-            Stopwatch sw = new();
-            sw.Start();
             for (int i = 0; i < points.Count; i++)
             {
-                for (int j = i + 1; j < points.Count; j++)
+                for (int j = i+1; j < points.Count; j++)
                 {
                     Box box = new Box(points[i], points[j]);
 
@@ -211,47 +148,13 @@ namespace AoC2025
 
                 }
             }
-            sw.Stop();
-
-            Console.WriteLine(sw.ElapsedMilliseconds);
-            Console.WriteLine(bestBox);
-
-            //var grid = new char[14,14];
 
 
-            //for (double i = bestBox.P1.Y; i <= bestBox.P2.Y; i++)
-            //{
-            //    for (double j = bestBox.P1.X; j <= bestBox.P2.X; j++)
-            //    {
-            //        grid[(int)i, (int)j] = (char)65;
-            //    }
-            //}
-
-            //DrawGrid(grid);
-
+#if DEBUG
             Console.WriteLine(bestSize);
+#endif
 
-            
-        }
-        public void DrawGrid(char[,] grid)
-        {
-            for (int i = 0; i < grid.GetLength(0); i++)
-            {
-                for (int j = 0; j < grid.GetLength(1); j++)
-                {
-                    if (grid[i,j] != 0)
-                    {
-                        Console.Write(grid[i, j]);
-                    }
-                    else
-                    {
-                        Console.Write('.');
-                    }
-                }
-                Console.WriteLine();
-            }
 
-            Console.WriteLine();
         }
     }
 
@@ -301,7 +204,7 @@ namespace AoC2025
 
         public bool Intersects(Line other)
         {
-            if (horizontal == other.horizontal) return horizontal ? other.P1.X == P1.X : other.P1.Y == P1.Y;
+            if (horizontal == other.horizontal) return false;
 
             return horizontal ? Math.Min(other.P1.Y, other.P2.Y) <= P1.Y && Math.Max(other.P1.Y, other.P2.Y) >= P1.Y && P1.X <= other.P1.X && P2.X >= other.P1.X : other.Intersects(this);
 
