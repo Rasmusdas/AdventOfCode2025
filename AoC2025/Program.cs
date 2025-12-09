@@ -2,29 +2,32 @@
 using BenchmarkDotNet.Running;
 
 #if DEBUG
-// new Day1().SolvePart1();
-// new Day1().SolvePart2();
-//
-// new Day2().SolvePart1();
-// new Day2().SolvePart2();
-//
-// new Day3().SolvePart1();
-// new Day3().SolvePart2();
-//
-// new Day4().SolvePart1();
-// new Day4().SolvePart2();
-//
-// new Day5().SolvePart1();
-// new Day5().SolvePart2();
-//
-// new Day6().SolvePart1();
-// new Day6().SolvePart2();
+//new Day1().SolvePart1();
+//new Day1().SolvePart2();
 
-// new Day7().SolvePart1();
-// new Day7().SolvePart2();
+//new Day2().SolvePart1();
+//new Day2().SolvePart2();
 
-new Day8().SolvePart1();
-new Day8().SolvePart2();
+//new Day3().SolvePart1();
+//new Day3().SolvePart2();
+
+//new Day4().SolvePart1();
+//new Day4().SolvePart2();
+
+//new Day5().SolvePart1();
+//new Day5().SolvePart2();
+
+//new Day6().SolvePart1();
+//new Day6().SolvePart2();
+
+//new Day7().SolvePart1();
+//new Day7().SolvePart2();
+
+//new Day8().SolvePart1();
+//new Day8().SolvePart2();
+
+new Day9().SolvePart1();
+new Day9().SolvePart2();
 
 #else
 // BenchmarkRunner.Run<Day1>();
