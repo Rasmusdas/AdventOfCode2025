@@ -136,7 +136,6 @@ namespace AoC2025
 
                     if (v1Count != 0 || v2Count != 0) continue;
 
-
                     box = new Box(points[i], points[j]);
 
                     if (box.GetSize() > bestSize)

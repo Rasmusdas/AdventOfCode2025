@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageReference Include="Google.OrTools" Version="9.14.6206" />
   </ItemGroup>
 
 </Project>
