@@ -196,6 +196,8 @@ public class Graph<T>
     private int _nextId = 0;
     public int NodeCount => _nodes.Count;
 
+    public List<T> Nodes => _nodes.ToList();
+
     public void AddNode(T node)
     {
         _adjancencyList.Add(new List<int>());
@@ -205,7 +207,7 @@ public class Graph<T>
 
     public void AddEdge(T from, T to)
     {
-        if (!_idLookup.TryGetValue(from,out _))
+        if (!_idLookup.TryGetValue(from, out _))
         {
             AddNode(from);
         }
@@ -214,9 +216,51 @@ public class Graph<T>
         {
             AddNode(to);
         }
-        
+
         _adjancencyList[_idLookup[from]].Add(_idLookup[to]);
         _adjancencyList[_idLookup[to]].Add(_idLookup[from]);
+    }
+
+    public void AddDirectedEdge(T from, T to)
+    {
+        if (!_idLookup.TryGetValue(from, out _))
+        {
+            AddNode(from);
+        }
+
+        if (!_idLookup.TryGetValue(to, out _))
+        {
+            AddNode(to);
+        }
+
+        _adjancencyList[_idLookup[from]].Add(_idLookup[to]);
+    }
+
+    public int GetNodeId(T node)
+    {
+        if(_idLookup.TryGetValue(node,out int id))
+        {
+            return id;
+        }
+
+        return -1;
+    }
+
+    public List<T> GetConnections(T node)
+    {
+        if (!_idLookup.TryGetValue(node, out _))
+        {
+            return new List<T>();
+        }
+
+        List<T> connections = new List<T>();
+
+        foreach(var connectedNode in _adjancencyList[_idLookup[node]])
+        {
+            connections.Add(_nodes[connectedNode]);
+        }
+
+        return connections;
     }
 
     public List<int> GetComponentSizes()
