@@ -122,7 +122,7 @@ namespace AoC2025
                 }
             }
 
-            Console.WriteLine($"Sum = {sum}");
+            Console.WriteLine($"{sum}");
         }
 
     }

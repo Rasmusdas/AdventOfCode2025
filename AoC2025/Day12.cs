@@ -66,9 +66,11 @@ public class Day12 : Day
             }
         }
         
-        Console.WriteLine(canMaybeFit);
+        //Console.WriteLine(canMaybeFit); Always 0 :⁾
+#if DEBUG
         Console.WriteLine(canAlwaysFit);
-        Console.WriteLine(canNeverFit);
+#endif
+        //Console.WriteLine(canNeverFit);
     }
 }
 
