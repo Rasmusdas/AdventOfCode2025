@@ -33,7 +33,9 @@ using BenchmarkDotNet.Running;
 //new Day10().SolvePart2();
 
 //new Day11().SolvePart1();
-new Day11().SolvePart2();
+//new Day11().SolvePart2();
+
+new Day12().SolvePart1();
 
 #else
 // BenchmarkRunner.Run<Day1>();
